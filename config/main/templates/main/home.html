@@ -1,0 +1,64 @@
+
+{% extends 'main/base.html' %}
+
+{% block title %}Uzum Market — Главная{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h1>Добро пожаловать в Uzum Market 💜</h1>
+    <p>Лучшие товары по выгодным ценам!</p>
+
+    <div class="categories">
+        <a href="/">Все товары</a>
+        {% for cat in categories %}
+            <a href="/?category={{ cat|urlencode }}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+
+    <h2>Популярные товары</h2>
+
+    <div class="products">
+        {% for product in products %}
+        <div class="product">
+
+            {% if product.image_url %}
+                <img src="{{ product.image_url }}" alt="{{ product.name }}"
+                     onerror="this.src='https://placehold.co/400x300?text=Product'">
+            {% else %}
+                <img src="https://placehold.co/400x300?text=Product" alt="Товар">
+            {% endif %}
+
+            <p style="color:#888;font-size:13px">{{ product.category }}</p>
+
+            <h3>{{ product.name }}</h3>
+
+            <p class="price">{{ product.price }} сум</p>
+
+            <p>{{ product.description|truncatechars:65 }}</p>
+
+            <div class="actions">
+                <form method="post" action="{% url 'add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <button class="cart-btn">🛒 В корзину</button>
+                </form>
+
+                <a class="btn edit" href="{% url 'edit_product' product.id %}">
+                    Изменить
+                </a>
+
+                <form method="post" action="{% url 'delete_product' product.id %}"
+                      onsubmit="return confirm('Удалить этот товар?')">
+                    {% csrf_token %}
+                    <button class="delete">Удалить</button>
+                </form>
+            </div>
+
+        </div>
+        {% empty %}
+            <h2>Товары не найдены</h2>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

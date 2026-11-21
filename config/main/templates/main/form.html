@@ -1,0 +1,71 @@
+
+{% extends 'main/base.html' %}
+
+{% block title %}{{ title }} | Uzum Market{% endblock %}
+
+{% block content %}
+
+<div class="form-box">
+
+    <h2>{{ title }}</h2>
+    <p>Заполни информацию о товаре 💜</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Название товара</label>
+        <input
+            type="text"
+            name="name"
+            value="{{ product.name|default:'' }}"
+            placeholder="Например, iPhone 16"
+            required
+        >
+
+        <label>Цена (сум)</label>
+        <input
+            type="number"
+            name="price"
+            value="{{ product.price|default:'' }}"
+            placeholder="Например, 1000000"
+            min="1"
+            required
+        >
+
+        <label>Категория</label>
+        <input
+            type="text"
+            name="category"
+            value="{{ product.category|default:'' }}"
+            placeholder="Электроника"
+            required
+        >
+
+        <label>Ссылка на фотографию</label>
+        <input
+            type="url"
+            name="image_url"
+            value="{{ product.image_url|default:'' }}"
+            placeholder="https://example.com/photo.jpg"
+        >
+
+        <label>Описание товара</label>
+        <textarea
+            name="description"
+            rows="5"
+            placeholder="Расскажи о товаре..."
+        >{{ product.description|default:'' }}</textarea>
+
+        <button type="submit">
+            💜 Сохранить товар
+        </button>
+
+        <a class="btn edit" href="/">
+            Назад в магазин
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}
